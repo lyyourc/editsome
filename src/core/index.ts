@@ -5,7 +5,9 @@ import { schema } from 'prosemirror-schema-basic'
 import { addListNodes } from 'prosemirror-schema-list'
 import { exampleSetup } from 'prosemirror-example-setup'
 import createCommands, { Commands } from './commands';
-
+import DocNode from './extensions/nodes/doc';
+import TextNode from './extensions/nodes/text';
+import ParagraphNode from './extensions/nodes/paragraph';
 
 export type EditorOptions = {
   el: HTMLElement
@@ -39,9 +41,21 @@ export default class Editor implements IEditor {
   }
 
   createSchema() {
+    const nodes = [
+      TextNode(),
+      ParagraphNode(),
+      DocNode(),
+    ]
+    const nodeSchemas = nodes.reduce((schemas, node) => {
+      return {
+        ...schemas,
+        [node.name]: node.schema
+      }
+    }, {})
+
     return new Schema({
-      nodes: addListNodes(schema.spec.nodes, 'paragraph block*', 'block'),
-      marks: schema.spec.marks,
+      nodes: nodeSchemas as any,
+      // marks: schema.spec.marks,
     })
   }
 
