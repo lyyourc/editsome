@@ -1,11 +1,7 @@
 import React, { createContext, FunctionComponent, useState } from 'react'
-import { EditorView } from 'prosemirror-view'
-import { Commands } from './commands';
+import Editor from '.';
 
-type Context = {
-  editorView: EditorView
-  commands: Commands
-}
+type Context = Editor & {}
 
 export const EditorContext = createContext({} as Context)
 

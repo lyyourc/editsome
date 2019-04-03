@@ -1,16 +1,14 @@
 import React, { useContext, useEffect, useRef, useState } from 'react' 
 import { EditorContext } from './provider';
-import { EditorView } from 'prosemirror-view'
-import { Editor, EditorSchema } from '.'
-import createCommands from './commands';
+import Editor, { EditorOptions } from '.'
 
-type EditorOption = {
+type useEditorProps = {
   container: React.RefObject<HTMLElement>
-  content: string
+  content: EditorOptions['content']
 }
 
-export function useEditor({ container, content }: EditorOption) {
-  const [editorView, setEditorView] = useState<EditorView>(null! as EditorView)
+export function useEditor({ container, content }: useEditorProps) {
+  const [editor, setEditor] = useState<Editor>({}! as Editor)
 
   useEffect(() => {
     if (container.current == null) {
@@ -18,14 +16,11 @@ export function useEditor({ container, content }: EditorOption) {
     }
 
     console.log('[editor] render start')
-    const view = Editor(container.current, content)
-    setEditorView(view)
+    const editor = new Editor({ el: container.current, content })
+    setEditor(editor)
   }, [])
 
-  return {
-    editorView,
-    commands: createCommands({ view: editorView, schema: EditorSchema })
-  }
+  return editor
 }
 
 export function useEditorContext() {

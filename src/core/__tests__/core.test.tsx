@@ -19,7 +19,7 @@ export default function CoreTest() {
 }
 
 function Menu() {
-  const { editorView, commands } = useEditorContext()
+  const { view, commands } = useEditorContext()
 
   const items = [
     { component: 'B', command: () => commands.strong() },
@@ -34,7 +34,7 @@ function Menu() {
           key={i}
           onMouseDown={e => {
             e.preventDefault()
-            editorView.focus()
+            view.focus()
             item.command()
           }}
         >
