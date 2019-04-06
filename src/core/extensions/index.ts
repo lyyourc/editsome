@@ -1,10 +1,23 @@
-import { Schema, NodeSpec } from "prosemirror-model";
-import {Omit} from 'type-fest'
+import { Schema, NodeSpec, MarkSpec } from 'prosemirror-model'
+import Editor from '../editor'
 
 export type ExtensionType = 'node' | 'mark' | 'extension'
+export type NodeBuiltin = 'doc' | 'paragraph' | 'text'
+export type MarkBuiltin = 'strong' | 'link'
 
-export interface FatsoNode {
-  type: 'node'
+export interface FatsoExtension<
+  Spec = NodeSpec | MarkSpec
+> {
+  type: ExtensionType
   name: string
-  schema: NodeSpec
+  schema: Spec
+  command?: (props: { view: Editor['view']; schema: Editor['schema'] }) => any
+}
+
+export interface FatsoNode extends FatsoExtension<NodeSpec> {
+  type: 'node'
+}
+
+export interface FatsoMark extends FatsoExtension<MarkSpec> {
+  type: 'mark'
 }
