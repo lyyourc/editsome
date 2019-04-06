@@ -3,15 +3,16 @@ import { EditorView } from 'prosemirror-view'
 import { Schema, DOMParser, NodeSpec, MarkSpec } from 'prosemirror-model'
 import { schema } from 'prosemirror-schema-basic'
 import { addListNodes } from 'prosemirror-schema-list'
-import { exampleSetup } from 'prosemirror-example-setup'
 import DocNode from './extensions/nodes/doc'
 import TextNode from './extensions/nodes/text'
 import ParagraphNode from './extensions/nodes/paragraph'
 import { FatsoExtension, FatsoNode, FatsoMark } from './extensions'
-import Strong from './extensions/marks/strong'
+import Strong from './extensions/marks/bold'
+import HeadingNode, { HeadingCommandOptions } from './extensions/nodes/heading';
 
-export type Commands<N extends string, M extends string> = {
-  [name in N | M]: any
+export type Commands = {
+  strong: () => any
+  heading: (options: HeadingCommandOptions) => any
 }
 
 export type EditorOptions = {
@@ -25,7 +26,7 @@ export default class Editor<N extends string = any, M extends string = any> {
   schema: Schema<N, M>
   state: EditorState<Schema<N, M>>
   view: EditorView<Schema<N, M>>
-  commands: Commands<N, M>
+  commands: Commands
 
   constructor(options: EditorOptions) {
     this.options = options
@@ -37,28 +38,26 @@ export default class Editor<N extends string = any, M extends string = any> {
   }
 
   createExtensions() {
-    const extensions = [DocNode(), TextNode(), ParagraphNode(), Strong()]
+    const extensions = [DocNode(), TextNode(), ParagraphNode(), HeadingNode(), Strong()]
     return extensions
   }
 
   createCommands() {
-    return this.extensions.reduce(
+    const es =  this.extensions.reduce(
       (commands, extension) => {
-        if (extension.command) {
-          return {
-            ...commands,
-            [extension.name]: () => {
-              if (extension.command) {
-                extension.command({ view: this.view, schema: this.schema })
-              }
-            },
-          }
+        return {
+          ...commands,
+          [extension.name]: (o: any) => {
+            if (extension.command) {
+              return extension.command({ view: this.view, schema: this.schema })(o)
+            }
+          },
         }
-
-        return commands
       },
       {} as any
     )
+
+    return es
   }
 
   createSchema() {

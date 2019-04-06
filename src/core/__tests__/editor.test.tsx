@@ -4,7 +4,7 @@ import styled from '@emotion/styled'
 import Fatso, { useEditorContext } from '..'
 import { MarkBuiltin, NodeBuiltin } from '../extensions'
 
-export default function CoreTest() {
+export default function EditorTest() {
   const editorRef = useRef(null)
 
   return (
@@ -23,11 +23,9 @@ function Menu() {
     MarkBuiltin
   >()
 
-  console.log(commands)
-
   const items = [
     { component: 'B', command: () => commands.strong() },
-    // { component: 'h1', command: () => commands.heading({ level: 1 }) },
+    { component: 'h1', command: () => commands.heading({ level: 1 }) },
     // { component: 'h2', command: () => commands.heading({ level: 2 }) },
   ]
 
