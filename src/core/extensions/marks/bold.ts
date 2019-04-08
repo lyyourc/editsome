@@ -18,5 +18,12 @@ export default function BoldMark(): FatsoMark {
     command({ view, schema }) {
       return () => toggleMark(schema.marks.bold)(view.state, view.dispatch)
     },
+
+    keymaps({ schema }) {
+      return {
+        'Mod-b': toggleMark(schema.marks.bold),
+        'Mod-B': toggleMark(schema.marks.bold),
+      }
+    },
   }
 }

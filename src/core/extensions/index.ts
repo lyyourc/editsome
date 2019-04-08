@@ -13,6 +13,9 @@ export interface FatsoExtension<Spec = NodeSpec | MarkSpec> {
     view: Editor['view']
     schema: Editor['schema']
   }) => (options: any) => any
+  keymaps?: (props: {
+    schema: Editor['schema']
+  }) => { [key: string]: (options: any) => any }
 }
 
 export interface FatsoNode extends FatsoExtension<NodeSpec> {

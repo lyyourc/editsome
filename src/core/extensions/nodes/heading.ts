@@ -6,6 +6,10 @@ export type HeadingCommandOptions = {
 }
 
 export default function HeadingNode(): FatsoNode {
+  const options = {
+    levels: [1, 2, 3, 4, 5, 6]
+  }
+
   return {
     type: 'node',
     name: 'heading',
@@ -30,5 +34,13 @@ export default function HeadingNode(): FatsoNode {
       return ({ level }) =>
         setBlockType(schema.nodes.heading, { level })(view.state, view.dispatch)
     },
+    keymaps({ schema }) {
+      return options.levels.reduce((items, level) => ({
+        ...items,
+        ...{
+          [`Shift-Ctrl-${level}`]: setBlockType(schema.nodes.heading, { level }),
+        },
+      }), {})
+    }
   }
 }
