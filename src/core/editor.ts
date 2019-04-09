@@ -3,6 +3,13 @@ import { EditorView } from 'prosemirror-view'
 import { Schema, DOMParser, NodeSpec, MarkSpec } from 'prosemirror-model'
 import { keymap } from 'prosemirror-keymap'
 import { baseKeymap } from 'prosemirror-commands'
+import {
+  inputRules,
+  smartQuotes,
+  emDash,
+  ellipsis,
+  InputRule,
+} from 'prosemirror-inputrules'
 import DocNode from './extensions/nodes/doc'
 import TextNode from './extensions/nodes/text'
 import ParagraphNode from './extensions/nodes/paragraph'
@@ -113,7 +120,11 @@ export default class Editor<N extends string = any, M extends string = any> {
     const state = EditorState.create({
       schema: this.schema,
       doc: DOMParser.fromSchema(this.schema).parse(contentElement),
-      plugins: [...this.createKeymaps(), keymap(baseKeymap)],
+      plugins: [
+        ...this.createKeymaps(),
+        keymap(baseKeymap),
+        this.createInputRules(),
+      ],
     })
     return state
   }
@@ -135,5 +146,29 @@ export default class Editor<N extends string = any, M extends string = any> {
     })
 
     return view
+  }
+
+  createInputRules() {
+    const rulesBuiltin = smartQuotes.concat(ellipsis, emDash)
+
+    const rules = [
+      ...rulesBuiltin,
+      ...this.extensions
+        .reduce(
+          (rules, ext) => {
+            if (ext.inputRules == null) {
+              return rules
+            }
+
+            return [
+              ...rules,
+              ...ext.inputRules({ schema: this.schema })
+            ]
+          },
+          [] as InputRule[]
+        )
+    ]
+
+    return inputRules({ rules })
   }
 }

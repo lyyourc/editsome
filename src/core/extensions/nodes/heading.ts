@@ -1,6 +1,7 @@
 import { FatsoNode } from '..'
 import { setBlockType } from 'prosemirror-commands'
-import isNodeActive from '../../utils/isNodeActive';
+import isNodeActive from '../../utils/isNodeActive'
+import { textblockTypeInputRule } from 'prosemirror-inputrules'
 
 export type HeadingCommandOptions = {
   level: number
@@ -35,13 +36,13 @@ export default function HeadingNode(): FatsoNode {
       const type = schema.nodes.heading
       // ⚠️: if 'view' changed, but state keeps old
       // ❌: const { state } = view
-      // ✅: view.state 
+      // ✅: view.state
 
       return {
-        active: (attrs) => {
+        active: attrs => {
           return isNodeActive({ type, attrs, state: view.state })
         },
-        run: (attrs) => {
+        run: attrs => {
           const active = isNodeActive({ type, attrs, state: view.state })
 
           if (active) {
@@ -49,7 +50,7 @@ export default function HeadingNode(): FatsoNode {
           } else {
             setBlockType(schema.nodes.heading, attrs)(view.state, view.dispatch)
           }
-        }
+        },
       }
     },
 
@@ -65,6 +66,17 @@ export default function HeadingNode(): FatsoNode {
         }),
         {}
       )
+    },
+
+    // https://github.com/ProseMirror/prosemirror-example-setup/blob/master/src/inputrules.js#L39
+    inputRules({ schema }) {
+      return [
+        textblockTypeInputRule(
+          new RegExp('^(#{1,' + options.levels.length + '})\\s$'),
+          schema.nodes.heading,
+          match => ({ level: match[1].length })
+        ),
+      ]
     },
   }
 }
