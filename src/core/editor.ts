@@ -9,15 +9,12 @@ import ParagraphNode from './extensions/nodes/paragraph'
 import { FatsoExtension, FatsoNode, FatsoMark } from './extensions'
 import Strong from './extensions/marks/bold'
 import HeadingNode, { HeadingCommandOptions } from './extensions/nodes/heading'
-
-export type Commands = {
-  strong: () => any
-  heading: (options: HeadingCommandOptions) => any
-}
+import { Commands } from './commands'
 
 export type EditorOptions = {
   el: HTMLElement
   content: string
+  onUpdate?: () => any
 }
 
 export default class Editor<N extends string = any, M extends string = any> {
@@ -59,24 +56,22 @@ export default class Editor<N extends string = any, M extends string = any> {
   }
 
   createCommands() {
-    const es = this.extensions.reduce(
+    return this.extensions.reduce(
       (commands, extension) => {
+        if (!extension.command) {
+          return commands
+        }
+
         return {
           ...commands,
-          [extension.name]: (o: any) => {
-            if (extension.command) {
-              return extension.command({
-                view: this.view,
-                schema: this.schema,
-              })(o)
-            }
-          },
+          [extension.name]: extension.command({
+            view: this.view,
+            schema: this.schema,
+          }),
         }
       },
       {} as any
     )
-
-    return es
   }
 
   createSchema() {
@@ -125,9 +120,20 @@ export default class Editor<N extends string = any, M extends string = any> {
 
   createView() {
     const { state, options } = this
-    const { el } = options
+    const { el, onUpdate } = options
 
-    const view = new EditorView(el, { state })
+    const view = new EditorView(el, {
+      state,
+      dispatchTransaction: transaction => {
+        this.state = this.state.apply(transaction)
+        view.updateState(this.state)
+
+        if (onUpdate) {
+          onUpdate()
+        }
+      },
+    })
+
     return view
   }
 }

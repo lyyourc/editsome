@@ -1,5 +1,6 @@
 import { FatsoMark } from '..'
 import { toggleMark, setBlockType } from 'prosemirror-commands'
+import isMarkActive from '../../utils/isMarkActive';
 
 export default function BoldMark(): FatsoMark {
   return {
@@ -16,7 +17,14 @@ export default function BoldMark(): FatsoMark {
       ],
     },
     command({ view, schema }) {
-      return () => toggleMark(schema.marks.bold)(view.state, view.dispatch)
+      return {
+        active: () => {
+          return isMarkActive({ type: schema.marks.bold, state: view.state })
+        },
+        run: () => {
+          return toggleMark(schema.marks.bold)(view.state, view.dispatch)
+        }
+      }
     },
 
     keymaps({ schema }) {

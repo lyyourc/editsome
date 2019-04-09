@@ -1,5 +1,6 @@
 import { Schema, NodeSpec, MarkSpec } from 'prosemirror-model'
 import Editor from '../editor'
+import { Command } from '../commands';
 
 export type ExtensionType = 'node' | 'mark' | 'extension'
 export type NodeBuiltin = 'doc' | 'paragraph' | 'text' | 'heading'
@@ -12,7 +13,7 @@ export interface FatsoExtension<Spec = NodeSpec | MarkSpec> {
   command?: (props: {
     view: Editor['view']
     schema: Editor['schema']
-  }) => (options: any) => any
+  }) => Command
   keymaps?: (props: {
     schema: Editor['schema']
   }) => { [key: string]: (options: any) => any }

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useContext } from 'react'
-import Editor, { EditorOptions } from './editor';
+import React, { useState, useEffect, useContext, useReducer } from 'react'
+import Editor, { EditorOptions } from './editor'
 
 export const FatsoContext = React.createContext({} as Editor)
 
@@ -9,7 +9,11 @@ interface FatsoProps {
   content: EditorOptions['content']
 }
 
-export default function Fatso<N extends string, M extends string>({ container, content, children }: FatsoProps) {
+export default function Fatso<N extends string, M extends string>({
+  container,
+  content,
+  children,
+}: FatsoProps) {
   const [editor, setEditor] = useState<Editor<N, M>>({}! as Editor<N, M>)
 
   useEffect(() => {
@@ -21,6 +25,9 @@ export default function Fatso<N extends string, M extends string>({ container, c
     const editor = new Editor<N, M>({
       el: container.current,
       content,
+      onUpdate() {
+        setEditor({ ...editor } as any)
+      },
     })
     setEditor(editor)
   }, [])

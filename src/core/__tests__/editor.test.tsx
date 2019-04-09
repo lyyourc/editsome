@@ -23,9 +23,21 @@ function Menu() {
     MarkBuiltin
   >()
 
+  if (commands == null) {
+    return null
+  }
+
   const items = [
-    { component: 'B', command: () => commands.strong() },
-    { component: 'h1', command: () => commands.heading({ level: 1 }) },
+    {
+      component: 'B',
+      command: () => commands.bold.run(),
+      active: commands.bold.active(),
+    },
+    {
+      component: 'h1',
+      command: () => commands.heading.run({ level: 1 }),
+      active: commands.heading.active({ level: 1 }),
+    },
     // { component: 'h2', command: () => commands.heading({ level: 2 }) },
   ]
 
@@ -34,6 +46,7 @@ function Menu() {
       {items.map((item, i) => (
         <button
           key={i}
+          style={{ background: item.active ? '#ccc' : 'transparent' }}
           onMouseDown={e => {
             e.preventDefault()
             view.focus()

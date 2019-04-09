@@ -1,5 +1,6 @@
 import { FatsoNode } from '..'
 import { setBlockType } from 'prosemirror-commands'
+import isNodeActive from '../../utils/isNodeActive';
 
 export type HeadingCommandOptions = {
   level: number
@@ -7,7 +8,7 @@ export type HeadingCommandOptions = {
 
 export default function HeadingNode(): FatsoNode {
   const options = {
-    levels: [1, 2, 3, 4, 5, 6]
+    levels: [1, 2, 3, 4, 5, 6],
   }
 
   return {
@@ -31,16 +32,39 @@ export default function HeadingNode(): FatsoNode {
       },
     },
     command({ schema, view }) {
-      return ({ level }) =>
-        setBlockType(schema.nodes.heading, { level })(view.state, view.dispatch)
-    },
-    keymaps({ schema }) {
-      return options.levels.reduce((items, level) => ({
-        ...items,
-        ...{
-          [`Shift-Ctrl-${level}`]: setBlockType(schema.nodes.heading, { level }),
+      const type = schema.nodes.heading
+      // ⚠️: if 'view' changed, but state keeps old
+      // ❌: const { state } = view
+      // ✅: view.state 
+
+      return {
+        active: (attrs) => {
+          return isNodeActive({ type, attrs, state: view.state })
         },
-      }), {})
-    }
+        run: (attrs) => {
+          const active = isNodeActive({ type, attrs, state: view.state })
+
+          if (active) {
+            setBlockType(schema.nodes.paragraph)(view.state, view.dispatch)
+          } else {
+            setBlockType(schema.nodes.heading, attrs)(view.state, view.dispatch)
+          }
+        }
+      }
+    },
+
+    keymaps({ schema }) {
+      return options.levels.reduce(
+        (items, level) => ({
+          ...items,
+          ...{
+            [`Shift-Ctrl-${level}`]: setBlockType(schema.nodes.heading, {
+              level,
+            }),
+          },
+        }),
+        {}
+      )
+    },
   }
 }
