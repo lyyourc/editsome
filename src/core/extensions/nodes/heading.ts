@@ -2,6 +2,7 @@ import { FatsoNode } from '..'
 import { setBlockType } from 'prosemirror-commands'
 import isNodeActive from '../../utils/isNodeActive'
 import { textblockTypeInputRule } from 'prosemirror-inputrules'
+import toggleBlockType from '../../commands/toggleBlockType'
 
 export type HeadingCommandOptions = {
   level: number
@@ -33,7 +34,7 @@ export default function headingNode(): FatsoNode {
       },
     },
     command({ schema, view }) {
-      const type = schema.nodes.heading
+      const { heading: type, paragraph: toggleType } = schema.nodes
       // ⚠️: if 'view' changed, but state keeps old
       // ❌: const { state } = view
       // ✅: view.state
@@ -43,29 +44,32 @@ export default function headingNode(): FatsoNode {
           return isNodeActive({ type, attrs, state: view.state })
         },
         run: attrs => {
-          const active = isNodeActive({ type, attrs, state: view.state })
-
-          if (active) {
-            setBlockType(schema.nodes.paragraph)(view.state, view.dispatch)
-          } else {
-            setBlockType(schema.nodes.heading, attrs)(view.state, view.dispatch)
-          }
+          return toggleBlockType({ type, toggleType, attrs })(
+            view.state,
+            view.dispatch
+          )
         },
       }
     },
 
     keymaps({ schema }) {
-      return options.levels.reduce(
+      const { heading: type, paragraph: toggleType } = schema.nodes
+
+      const maps = options.levels.reduce(
         (items, level) => ({
           ...items,
           ...{
-            [`Shift-Ctrl-${level}`]: setBlockType(schema.nodes.heading, {
-              level,
+            [`Mod-Alt-${level}`]: toggleBlockType({
+              type,
+              toggleType,
+              attrs: { level },
             }),
           },
         }),
         {}
       )
+      console.log(maps)
+      return maps
     },
 
     // https://github.com/ProseMirror/prosemirror-example-setup/blob/master/src/inputrules.js#L39

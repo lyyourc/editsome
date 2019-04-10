@@ -1,18 +1,25 @@
 import { setBlockType } from 'prosemirror-commands'
-import { EditorState, Transaction } from 'prosemirror-state';
-import { Schema, NodeType } from 'prosemirror-model';
-import { EditorView } from 'prosemirror-view';
+import isNodeActive from '../utils/isNodeActive'
+import { NodeType } from 'prosemirror-model'
+import { CommandCallback } from '.';
 
-export default function toggleBlockType<S extends Schema = any>({ cmd, view, toggleType }: {
-  cmd: (state: EditorState<S>, dispatch?: (tr: Transaction<S>) => void) => boolean;
-  view: EditorView<S>
-  toggleType: NodeType<S>
-}) {
-  const applicable = cmd(view.state)
+export default function toggleBlockType({
+  type,
+  toggleType,
+  attrs,
+}: {
+  type: NodeType
+  toggleType: NodeType
+  attrs?: { [key: string]: any }
+}): CommandCallback {
+  return (state, dispatch): boolean => {
+    const active = isNodeActive({ state, type, attrs })
 
-  if (applicable) {
-    cmd(view.state, view.dispatch)
-  } else {
-    setBlockType(toggleType)(view.state, view.dispatch)
+    if (active) {
+      return setBlockType(toggleType, attrs)(state, dispatch)
+    }
+
+    return setBlockType(type, attrs)(state, dispatch)
   }
 }
+

@@ -12,15 +12,15 @@ import {
 } from 'prosemirror-inputrules'
 import { FatsoExtension } from './extensions'
 import { FatsoCommands } from './commands'
-import blockquoteNode from './extensions/nodes/blockquote';
-import docNode from './extensions/nodes/doc';
-import textNode from './extensions/nodes/text';
-import paragraphNode from './extensions/nodes/paragraph';
-import headingNode from './extensions/nodes/heading';
-import boldMark from './extensions/marks/bold';
-import listItemNode from './extensions/nodes/listItem';
-import orderListNode from './extensions/nodes/orderedList';
-import bulletListNode from './extensions/nodes/bulletList';
+import blockquoteNode from './extensions/nodes/blockquote'
+import docNode from './extensions/nodes/doc'
+import textNode from './extensions/nodes/text'
+import paragraphNode from './extensions/nodes/paragraph'
+import headingNode from './extensions/nodes/heading'
+import boldMark from './extensions/marks/bold'
+import listItemNode from './extensions/nodes/listItem'
+import orderListNode from './extensions/nodes/orderedList'
+import bulletListNode from './extensions/nodes/bulletList'
 
 export type EditorOptions = {
   el: HTMLElement
@@ -43,16 +43,6 @@ export default class Editor<N extends string = any, M extends string = any> {
     this.state = this.createState()
     this.view = this.createView()
     this.commands = this.createCommands()
-  }
-
-  createKeymaps() {
-    const { schema } = this
-
-    return this.extensions
-      .filter(extension => extension.keymaps)
-      .map(extension => {
-        return keymap(extension.keymaps!({ schema }))
-      })
   }
 
   createExtensions() {
@@ -161,22 +151,28 @@ export default class Editor<N extends string = any, M extends string = any> {
 
     const rules = [
       ...rulesBuiltin,
-      ...this.extensions
-        .reduce(
-          (rules, ext) => {
-            if (ext.inputRules == null) {
-              return rules
-            }
+      ...this.extensions.reduce(
+        (rules, ext) => {
+          if (ext.inputRules == null) {
+            return rules
+          }
 
-            return [
-              ...rules,
-              ...ext.inputRules({ schema: this.schema })
-            ]
-          },
-          [] as InputRule[]
-        )
+          return [...rules, ...ext.inputRules({ schema: this.schema })]
+        },
+        [] as InputRule[]
+      ),
     ]
 
     return inputRules({ rules })
+  }
+
+  createKeymaps() {
+    const { schema } = this
+
+    return this.extensions
+      .filter(extension => extension.keymaps)
+      .map(extension => {
+        return keymap(extension.keymaps!({ schema }))
+      })
   }
 }
