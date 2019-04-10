@@ -1,6 +1,6 @@
 import { FatsoNode } from '..'
 
-export default function DocNode(): FatsoNode {
+export default function docNode(): FatsoNode {
   return {
     type: 'node',
     name: 'doc',

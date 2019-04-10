@@ -2,7 +2,7 @@ import { FatsoNode } from '..'
 import isNodeActive from '../../utils/isNodeActive';
 import toggleList from '../../commands/toggleList';
 
-export default function BulletListNode(): FatsoNode {
+export default function bulletListNode(): FatsoNode {
   return {
     type: 'node',
     name: 'bulletList',

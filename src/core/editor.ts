@@ -10,17 +10,17 @@ import {
   ellipsis,
   InputRule,
 } from 'prosemirror-inputrules'
-import DocNode from './extensions/nodes/doc'
-import TextNode from './extensions/nodes/text'
-import ParagraphNode from './extensions/nodes/paragraph'
-import { FatsoExtension, FatsoNode, FatsoMark } from './extensions'
-import Strong from './extensions/marks/bold'
-import HeadingNode, { HeadingCommandOptions } from './extensions/nodes/heading'
+import { FatsoExtension } from './extensions'
 import { FatsoCommands } from './commands'
-import ListItemNode from './extensions/nodes/listItem';
-import OrderListNode from './extensions/nodes/orderedList';
-import BulletListNode from './extensions/nodes/bulletList';
 import blockquoteNode from './extensions/nodes/blockquote';
+import docNode from './extensions/nodes/doc';
+import textNode from './extensions/nodes/text';
+import paragraphNode from './extensions/nodes/paragraph';
+import headingNode from './extensions/nodes/heading';
+import boldMark from './extensions/marks/bold';
+import listItemNode from './extensions/nodes/listItem';
+import orderListNode from './extensions/nodes/orderedList';
+import bulletListNode from './extensions/nodes/bulletList';
 
 export type EditorOptions = {
   el: HTMLElement
@@ -57,15 +57,15 @@ export default class Editor<N extends string = any, M extends string = any> {
 
   createExtensions() {
     const extensions = [
-      DocNode(),
-      TextNode(),
-      ParagraphNode(),
-      HeadingNode(),
-      Strong(),
-      ListItemNode(),
-      OrderListNode(),
-      BulletListNode(),
+      docNode(),
+      textNode(),
+      paragraphNode(),
+      headingNode(),
+      listItemNode(),
+      orderListNode(),
+      bulletListNode(),
       blockquoteNode(),
+      boldMark(),
     ]
     return extensions
   }

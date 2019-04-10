@@ -2,7 +2,7 @@ import { FatsoMark } from '..'
 import { toggleMark, setBlockType } from 'prosemirror-commands'
 import isMarkActive from '../../utils/isMarkActive';
 
-export default function BoldMark(): FatsoMark {
+export default function boldMark(): FatsoMark {
   return {
     type: 'mark',
     name: 'bold',

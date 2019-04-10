@@ -7,7 +7,7 @@ export type HeadingCommandOptions = {
   level: number
 }
 
-export default function HeadingNode(): FatsoNode {
+export default function headingNode(): FatsoNode {
   const options = {
     levels: [1, 2, 3, 4, 5, 6],
   }
