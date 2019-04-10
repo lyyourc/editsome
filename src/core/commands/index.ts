@@ -1,13 +1,20 @@
 import { HeadingCommandOptions } from '../extensions/nodes/heading'
+import { EditorState, Transaction } from 'prosemirror-state'
 
-export interface Command<O = any> {
+export interface FatsoCommand<O = any> {
   active: (options?: O) => boolean
   run: (options?: O) => any
 }
 
-export type Commands = {
-  bold: Command
-  heading: Command<{ level: number }>
-  orderedList: Command
-  bulletList: Command
+export type FatsoCommands = {
+  bold: FatsoCommand
+  heading: FatsoCommand<{ level: number }>
+  orderedList: FatsoCommand
+  bulletList: FatsoCommand
+  blockquote: FatsoCommand
 }
+
+export type CommandCallback = (
+  state: EditorState,
+  dispatch?: (tr: Transaction) => void
+) => boolean

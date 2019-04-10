@@ -10,9 +10,7 @@ export default function EditorTest() {
   return (
     <Fatso container={editorRef} content={'foo'}>
       <Menu />
-      <Container>
-        <div ref={editorRef} />
-      </Container>
+      <Container ref={editorRef} />
     </Fatso>
   )
 }
@@ -48,6 +46,11 @@ function Menu() {
       command: () => commands.bulletList.run(),
       active: commands.bulletList.active(),
     },
+    {
+      component: 'quote',
+      command: () => commands.blockquote.run(),
+      active: commands.blockquote.active(),
+    },
   ]
 
   return (
@@ -70,10 +73,22 @@ function Menu() {
 }
 
 const Container = styled('div')`
+  > [contenteditable=true] {
+    &:focus {
+      outline: none;
+    }
+  }
+
   li {
     padding: 0;
     > p {
       margin: 0;
     }
+  }
+
+  blockquote {
+    border-left: 2px solid #ccc;
+    margin-left: 0;
+    padding-left: 1em;
   }
 `
