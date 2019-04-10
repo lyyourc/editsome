@@ -17,6 +17,9 @@ import { FatsoExtension, FatsoNode, FatsoMark } from './extensions'
 import Strong from './extensions/marks/bold'
 import HeadingNode, { HeadingCommandOptions } from './extensions/nodes/heading'
 import { Commands } from './commands'
+import ListItemNode from './extensions/nodes/listItem';
+import OrderListNode from './extensions/nodes/orderedList';
+import BulletListNode from './extensions/nodes/bulletList';
 
 export type EditorOptions = {
   el: HTMLElement
@@ -58,6 +61,9 @@ export default class Editor<N extends string = any, M extends string = any> {
       ParagraphNode(),
       HeadingNode(),
       Strong(),
+      ListItemNode(),
+      OrderListNode(),
+      BulletListNode(),
     ]
     return extensions
   }

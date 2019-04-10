@@ -8,4 +8,6 @@ export interface Command<O = any> {
 export type Commands = {
   bold: Command
   heading: Command<{ level: number }>
+  orderedList: Command
+  bulletList: Command
 }

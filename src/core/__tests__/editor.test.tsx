@@ -38,7 +38,16 @@ function Menu() {
       command: () => commands.heading.run({ level: 1 }),
       active: commands.heading.active({ level: 1 }),
     },
-    // { component: 'h2', command: () => commands.heading({ level: 2 }) },
+    {
+      component: 'ol',
+      command: () => commands.orderedList.run(),
+      active: commands.orderedList.active(),
+    },
+    {
+      component: 'ul',
+      command: () => commands.bulletList.run(),
+      active: commands.bulletList.active(),
+    },
   ]
 
   return (
@@ -60,4 +69,11 @@ function Menu() {
   )
 }
 
-const Container = styled('div')``
+const Container = styled('div')`
+  li {
+    padding: 0;
+    > p {
+      margin: 0;
+    }
+  }
+`
