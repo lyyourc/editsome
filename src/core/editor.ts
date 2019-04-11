@@ -1,4 +1,4 @@
-import { EditorState } from 'prosemirror-state'
+import { EditorState, Plugin } from 'prosemirror-state'
 import { EditorView } from 'prosemirror-view'
 import { Schema, DOMParser, NodeSpec, MarkSpec } from 'prosemirror-model'
 import { keymap } from 'prosemirror-keymap'
@@ -21,6 +21,7 @@ import boldMark from './extensions/marks/bold'
 import listItemNode from './extensions/nodes/listItem'
 import orderListNode from './extensions/nodes/orderedList'
 import bulletListNode from './extensions/nodes/bulletList'
+import histroyExtension from './extensions/history'
 
 export type EditorOptions = {
   el: HTMLElement
@@ -56,6 +57,7 @@ export default class Editor<N extends string = any, M extends string = any> {
       bulletListNode(),
       blockquoteNode(),
       boldMark(),
+      histroyExtension(),
     ]
     return extensions
   }
@@ -122,6 +124,7 @@ export default class Editor<N extends string = any, M extends string = any> {
         ...this.createKeymaps(),
         keymap(baseKeymap),
         this.createInputRules(),
+        // ...this.createPlugins(),
       ],
     })
     return state
@@ -146,7 +149,7 @@ export default class Editor<N extends string = any, M extends string = any> {
     return view
   }
 
-  createInputRules() {
+  createInputRules(): Plugin {
     const rulesBuiltin = smartQuotes.concat(ellipsis, emDash)
 
     const rules = [
@@ -166,13 +169,25 @@ export default class Editor<N extends string = any, M extends string = any> {
     return inputRules({ rules })
   }
 
-  createKeymaps() {
+  createKeymaps(): Plugin[] {
     const { schema } = this
-
+    
     return this.extensions
       .filter(extension => extension.keymaps)
       .map(extension => {
         return keymap(extension.keymaps!({ schema }))
       })
+  }
+
+  createPlugins(): Plugin[] {
+    return this.extensions.reduce(
+      (allPlugins, ext) => {
+        if (ext.plugins) {
+          return [...allPlugins, ...(ext.plugins() || [])]
+        }
+        return allPlugins
+      },
+      [] as Plugin[]
+    )
   }
 }

@@ -68,7 +68,6 @@ export default function headingNode(): FatsoNode {
         }),
         {}
       )
-      console.log(maps)
       return maps
     },
 
