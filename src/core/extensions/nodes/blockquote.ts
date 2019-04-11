@@ -21,7 +21,7 @@ export default function blockquoteNode(): FatsoNode {
       return {
         active: () => isNodeActive({ type, state: view.state }),
         run: () => {
-          toggleWrap(type)
+          return toggleWrap(type)(view.state, view.dispatch)
         },
       }
     },
