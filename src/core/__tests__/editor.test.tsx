@@ -51,6 +51,16 @@ function Menu() {
       command: () => commands.blockquote.run(),
       active: commands.blockquote.active(),
     },
+    {
+      component: 'redo',
+      command: () => commands.redo.run(),
+      disabled: () => commands.redo.disabled!(),
+    },
+    {
+      component: 'undo',
+      command: () => commands.undo.run(),
+      disabled: () => commands.undo.disabled!(),
+    },
   ]
 
   return (
@@ -58,6 +68,7 @@ function Menu() {
       {items.map((item, i) => (
         <button
           key={i}
+          disabled={item.disabled && item.disabled()}
           style={{ background: item.active ? '#ccc' : 'transparent' }}
           onMouseDown={e => {
             e.preventDefault()

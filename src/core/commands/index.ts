@@ -2,8 +2,9 @@ import { HeadingCommandOptions } from '../extensions/nodes/heading'
 import { EditorState, Transaction } from 'prosemirror-state'
 
 export interface FatsoCommand<O = any> {
-  active: (options?: O) => boolean
   run: (options?: O) => any
+  active: (options?: O) => boolean
+  disabled?: (options?: O) => boolean
 }
 
 export type FatsoCommands = {
@@ -12,6 +13,8 @@ export type FatsoCommands = {
   orderedList: FatsoCommand
   bulletList: FatsoCommand
   blockquote: FatsoCommand
+  undo: FatsoCommand
+  redo: FatsoCommand
 }
 
 export type CommandCallback = (

@@ -44,6 +44,7 @@ export default class Editor<N extends string = any, M extends string = any> {
     this.state = this.createState()
     this.view = this.createView()
     this.commands = this.createCommands()
+    console.log(this.commands)
   }
 
   createExtensions() {
@@ -64,20 +65,27 @@ export default class Editor<N extends string = any, M extends string = any> {
 
   createCommands() {
     return this.extensions.reduce(
-      (commands, extension) => {
-        if (!extension.command) {
-          return commands
+      (allCommands, extension) => {
+        let cmds: Partial<FatsoCommands> = {}
+        const { schema, view } = this
+
+        if (extension.command) {
+          cmds[extension.name as keyof FatsoCommands] = extension.command({
+            view,
+            schema,
+          })
+        }
+
+        if (extension.commands) {
+          cmds = { ...cmds, ...extension.commands({ schema, view }) }
         }
 
         return {
-          ...commands,
-          [extension.name]: extension.command({
-            view: this.view,
-            schema: this.schema,
-          }),
+          ...allCommands,
+          ...cmds,
         }
       },
-      {} as any
+      {} as FatsoCommands
     )
   }
 
@@ -124,7 +132,7 @@ export default class Editor<N extends string = any, M extends string = any> {
         ...this.createKeymaps(),
         keymap(baseKeymap),
         this.createInputRules(),
-        // ...this.createPlugins(),
+        ...this.createPlugins(),
       ],
     })
     return state
@@ -171,7 +179,7 @@ export default class Editor<N extends string = any, M extends string = any> {
 
   createKeymaps(): Plugin[] {
     const { schema } = this
-    
+
     return this.extensions
       .filter(extension => extension.keymaps)
       .map(extension => {
