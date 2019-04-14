@@ -24,6 +24,7 @@ import bulletListNode from './extensions/nodes/bulletList'
 import histroyExtension from './extensions/history'
 import toolTipPlugin, { Tooltip } from './plugins/tooltip';
 import hardbreakNode from './extensions/nodes/hardbreak';
+import linkMark from './extensions/marks/link';
 
 export type EditorOptions = {
   el: HTMLElement
@@ -65,6 +66,7 @@ export default class Editor<N extends string = any, M extends string = any> {
       bulletListNode(),
       blockquoteNode(),
       boldMark(),
+      linkMark(),
       histroyExtension(),
     ]
     return extensions

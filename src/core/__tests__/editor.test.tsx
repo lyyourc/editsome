@@ -47,6 +47,14 @@ function FloatingMenu() {
       >
         B
       </button>
+      <button
+        onMouseDown={e => {
+          commands.link.run({ href: 'http://example.com' })
+        }}
+        style={{ background: commands.link.active() ? '#ccc' : 'transparent' }}
+      >
+        Link
+      </button>
     </div>
   )
 }

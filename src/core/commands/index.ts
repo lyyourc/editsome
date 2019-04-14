@@ -15,6 +15,7 @@ export type FatsoCommands = {
   blockquote: FatsoCommand
   undo: FatsoCommand
   redo: FatsoCommand
+  link: FatsoCommand<{ href: string }>
 }
 
 export type CommandCallback = (
