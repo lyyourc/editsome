@@ -22,6 +22,7 @@ import listItemNode from './extensions/nodes/listItem'
 import orderListNode from './extensions/nodes/orderedList'
 import bulletListNode from './extensions/nodes/bulletList'
 import histroyExtension from './extensions/history'
+import toolTipPlugin, { Tooltip } from './plugins/tooltip';
 
 export type EditorOptions = {
   el: HTMLElement
@@ -36,6 +37,11 @@ export default class Editor<N extends string = any, M extends string = any> {
   state: EditorState<Schema<N, M>>
   view: EditorView<Schema<N, M>>
   commands: FatsoCommands
+  tooltip: Tooltip = {
+    left: 0,
+    top: 0,
+    visible: false,
+  }
 
   constructor(options: EditorOptions) {
     this.options = options
@@ -44,7 +50,6 @@ export default class Editor<N extends string = any, M extends string = any> {
     this.state = this.createState()
     this.view = this.createView()
     this.commands = this.createCommands()
-    console.log(this.commands)
   }
 
   createExtensions() {
@@ -64,10 +69,10 @@ export default class Editor<N extends string = any, M extends string = any> {
   }
 
   createCommands() {
+    const { schema, view } = this
     return this.extensions.reduce(
       (allCommands, extension) => {
         let cmds: Partial<FatsoCommands> = {}
-        const { schema, view } = this
 
         if (extension.command) {
           cmds[extension.name as keyof FatsoCommands] = extension.command({
@@ -188,6 +193,10 @@ export default class Editor<N extends string = any, M extends string = any> {
   }
 
   createPlugins(): Plugin[] {
+    const builtinPlugins = [
+      toolTipPlugin(this)
+    ]
+
     return this.extensions.reduce(
       (allPlugins, ext) => {
         if (ext.plugins) {
@@ -195,7 +204,26 @@ export default class Editor<N extends string = any, M extends string = any> {
         }
         return allPlugins
       },
-      [] as Plugin[]
+      builtinPlugins
     )
+  }
+  
+  getTooltipProps = () => {
+    const el = this.view.dom as HTMLElement
+    const box = el.offsetParent!.getBoundingClientRect()
+    const { left, top, visible } = this.tooltip
+
+    return {
+      left: left - box.left,
+      bottom: box.bottom - top,
+      visible,
+    }
+  }
+
+  setTooltipProps(tooltip: Partial<Tooltip>) {
+    this.tooltip = {
+      ...this.tooltip,
+      ...tooltip,
+    }
   }
 }

@@ -11,7 +11,43 @@ export default function EditorTest() {
     <Fatso container={editorRef} content={'foo'}>
       <Menu />
       <Container ref={editorRef} />
+      <FloatingMenu />
     </Fatso>
+  )
+}
+
+function FloatingMenu() {
+  const { getTooltipProps, commands, view } = useEditorContext()
+
+  if (getTooltipProps == null) {
+    return null
+  }
+
+  const { bottom, left, visible } = getTooltipProps()
+
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        bottom,
+        left,
+        display: visible ? 'block' : 'none',
+        background: '#fff',
+        border: '1px solid #ccc',
+        padding: '2px 4px',
+        width: '88px',
+      }}
+    >
+      <button
+        onMouseDown={e => {
+          e.preventDefault()
+          view.focus()
+          commands.bold.run()
+        }}
+      >
+        B
+      </button>
+    </div>
   )
 }
 
@@ -84,7 +120,7 @@ function Menu() {
 }
 
 const Container = styled('div')`
-  > [contenteditable=true] {
+  > [contenteditable='true'] {
     &:focus {
       outline: none;
     }
