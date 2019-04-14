@@ -67,11 +67,11 @@ function Menu() {
       command: () => commands.bold.run(),
       active: commands.bold.active(),
     },
-    {
-      component: 'h1',
-      command: () => commands.heading.run({ level: 1 }),
-      active: commands.heading.active({ level: 1 }),
-    },
+    // {
+    //   component: 'h1',
+    //   command: () => commands.heading.run({ level: 1 }),
+    //   active: commands.heading.active({ level: 1 }),
+    // },
     {
       component: 'ol',
       command: () => commands.orderedList.run(),

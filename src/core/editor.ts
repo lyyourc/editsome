@@ -23,6 +23,7 @@ import orderListNode from './extensions/nodes/orderedList'
 import bulletListNode from './extensions/nodes/bulletList'
 import histroyExtension from './extensions/history'
 import toolTipPlugin, { Tooltip } from './plugins/tooltip';
+import hardbreakNode from './extensions/nodes/hardbreak';
 
 export type EditorOptions = {
   el: HTMLElement
@@ -57,6 +58,7 @@ export default class Editor<N extends string = any, M extends string = any> {
       docNode(),
       textNode(),
       paragraphNode(),
+      hardbreakNode(),
       headingNode(),
       listItemNode(),
       orderListNode(),

@@ -7,7 +7,7 @@ export default function paragraphNode(): FatsoNode {
 
     schema: {
       group: 'block',
-      content: 'text*',
+      content: 'inline*',
       toDOM() {
         return ['p', 0]
       },
