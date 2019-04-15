@@ -21,4 +21,4 @@ export type FatsoCommands = {
 export type CommandCallback = (
   state: EditorState,
   dispatch?: (tr: Transaction) => void
-) => boolean
+) => boolean | void

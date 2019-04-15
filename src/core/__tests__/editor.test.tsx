@@ -3,12 +3,19 @@ import { useRef, useEffect } from 'react'
 import styled from '@emotion/styled'
 import Fatso, { useEditorContext } from '..'
 import { MarkBuiltin, NodeBuiltin } from '../extensions'
+import getMarkAttrs from '../utils/getMarkAttrs';
+import { Selection, TextSelection, Transaction } from 'prosemirror-state';
 
 export default function EditorTest() {
   const editorRef = useRef(null)
+  const content = `
+    <p>
+      Hello, I am <a href="http://foo.com">foo</a>.
+    </p>
+  `
 
   return (
-    <Fatso container={editorRef} content={'foo'}>
+    <Fatso container={editorRef} content={content}>
       <Menu />
       <Container ref={editorRef} />
       <FloatingMenu />
@@ -17,13 +24,16 @@ export default function EditorTest() {
 }
 
 function FloatingMenu() {
-  const { getTooltipProps, commands, view } = useEditorContext()
+  const inputRef = useRef<HTMLInputElement>(null)
+  const { getTooltipProps, commands, view, state, schema } = useEditorContext()
 
   if (getTooltipProps == null) {
     return null
   }
 
   const { bottom, left, visible } = getTooltipProps()
+  const isLinkActive = commands.link.active()
+  const { href } = getMarkAttrs(state, schema.marks.link)
 
   return (
     <div
@@ -35,26 +45,45 @@ function FloatingMenu() {
         background: '#fff',
         border: '1px solid #ccc',
         padding: '2px 4px',
-        width: '88px',
+        minWidth: '88px',
       }}
     >
-      <button
-        onMouseDown={e => {
-          e.preventDefault()
-          view.focus()
-          commands.bold.run()
-        }}
-      >
-        B
-      </button>
-      <button
-        onMouseDown={e => {
-          commands.link.run({ href: 'http://example.com' })
-        }}
-        style={{ background: commands.link.active() ? '#ccc' : 'transparent' }}
-      >
-        Link
-      </button>
+      {isLinkActive ? (
+        <div>
+          <input defaultValue={href} ref={inputRef} />
+          <button onClick={() => {
+            commands.link.run({ href: inputRef.current!.value })
+            // hide the tooltip
+            const { tr, selection } = view.state
+            const { $head } = selection
+            const transaction = tr.setSelection(new TextSelection($head, $head))
+            view.dispatch(transaction)
+            view.focus()
+          }}>update</button>
+        </div>
+      ) : (
+        <div>
+          <button
+            onMouseDown={e => {
+              e.preventDefault()
+              view.focus()
+              commands.bold.run()
+            }}
+          >
+            B
+          </button>
+          <button
+            onMouseDown={e => {
+              commands.link.run({ href: '' })
+            }}
+            style={{
+              background: commands.link.active() ? '#ccc' : 'transparent',
+            }}
+          >
+            Link
+          </button>
+        </div>
+      )}
     </div>
   )
 }

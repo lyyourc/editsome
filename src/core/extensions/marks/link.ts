@@ -1,6 +1,10 @@
 import { FatsoMark } from '..'
 import { toggleMark } from 'prosemirror-commands';
 import isMarkActive from '../../utils/isMarkActive';
+import { Plugin, TextSelection } from 'prosemirror-state';
+import getMarkRange from '../../utils/getMarkRange';
+import updateMark from '../../commands/updateMark';
+import removeMark from '../../commands/removeMark';
 
 export default function linkMark(): FatsoMark {
   return {
@@ -34,9 +38,37 @@ export default function linkMark(): FatsoMark {
       return {
         active: () => isMarkActive({ type, state: view.state }),
         run: (attrs) => {
-          toggleMark(type, attrs)(view.state, view.dispatch)
+          if (attrs) {
+            return updateMark(type, attrs)(view.state, view.dispatch)
+          }
+
+          return removeMark(type)(view.state, view.dispatch)
         }
       }
+    },
+    
+    plugins() {
+      return [
+        new Plugin({
+          props: {
+            handleClick(view, pos) {
+              const { schema, doc, tr } = view.state
+              const range = getMarkRange(doc.resolve(pos), schema.marks.link)
+  
+              if (!range) {
+                return false
+              }
+  
+              const $start = doc.resolve(range.from)
+              const $end = doc.resolve(range.to)
+              const transaction = tr.setSelection(new TextSelection($start, $end))
+  
+              view.dispatch(transaction)
+              return true
+            },
+          },
+        }),
+      ]
     }
   }
 }
