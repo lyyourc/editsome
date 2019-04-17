@@ -30,7 +30,7 @@ function FloatingMenu() {
   if (getTooltipProps == null) {
     return null
   }
-
+  
   const { bottom, left, visible } = getTooltipProps()
   const isLinkActive = commands.link.active()
   const { href } = getMarkAttrs(state, schema.marks.link)
