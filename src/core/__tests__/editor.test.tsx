@@ -18,6 +18,10 @@ export default function EditorTest() {
         <div class="todo-content"><p>Hello, I am todo list.</p></div>
       </li>
     </ul>
+    <p>
+      This is an image <br />
+      <img src="https://avatars1.githubusercontent.com/u/6823863?s=200&v=4" />
+    </p>
   `
 
   return (
@@ -145,6 +149,10 @@ function Menu() {
       command: () => commands.undo.run(),
       disabled: () => commands.undo.disabled!(),
     },
+    {
+      component: 'image',
+      command: () => commands.image.run({ src: 'https://avatars1.githubusercontent.com/u/6823863?s=200&v=4'}),
+    }
   ]
 
   return (
@@ -174,6 +182,10 @@ const Container = styled('div')`
     }
   }
 
+  ul {
+    padding: 0;
+  }
+
   li {
     padding: 0;
     > p {
@@ -182,10 +194,14 @@ const Container = styled('div')`
 
     &.todo-item {
       display: flex;
-      align-items: center;
 
       &[data-done=true] {
         text-decoration: line-through;
+      }
+
+      .todo-checkbox {
+        height: 20px;
+        display: inline-block;
       }
 
       .todo-content {

@@ -17,6 +17,7 @@ export type FatsoCommands = {
   undo: FatsoCommand
   redo: FatsoCommand
   link: FatsoCommand<{ href: string }>
+  image: FatsoCommand<{ src: string, alt?: string, }>
 }
 
 export type CommandCallback = (

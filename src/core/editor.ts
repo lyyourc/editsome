@@ -27,6 +27,7 @@ import hardbreakNode from './extensions/nodes/hardbreak';
 import linkMark from './extensions/marks/link';
 import todoListNode from './extensions/nodes/todoList';
 import todoItemNode from './extensions/nodes/todoItem';
+import imageNode from './extensions/nodes/image';
 
 export type EditorOptions = {
   el: HTMLElement
@@ -69,6 +70,7 @@ export default class Editor<N extends string = any, M extends string = any> {
       todoItemNode(),
       todoListNode(),
       blockquoteNode(),
+      imageNode(),
       boldMark(),
       linkMark(),
       histroyExtension(),
