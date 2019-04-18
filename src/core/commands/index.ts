@@ -12,6 +12,7 @@ export type FatsoCommands = {
   heading: FatsoCommand<{ level: number }>
   orderedList: FatsoCommand
   bulletList: FatsoCommand
+  todoList: FatsoCommand
   blockquote: FatsoCommand
   undo: FatsoCommand
   redo: FatsoCommand

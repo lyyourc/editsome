@@ -12,6 +12,12 @@ export default function EditorTest() {
     <p>
       Hello, I am <a href="http://foo.com">foo</a>.
     </p>
+    <ul data-type="todo-list">
+      <li class="todo-item" data-done="false">
+        <input type="checkbox" class="todo-checkbox">
+        <div class="todo-content"><p>Hello, I am todo list.</p></div>
+      </li>
+    </ul>
   `
 
   return (
@@ -104,11 +110,11 @@ function Menu() {
       command: () => commands.bold.run(),
       active: commands.bold.active(),
     },
-    // {
-    //   component: 'h1',
-    //   command: () => commands.heading.run({ level: 1 }),
-    //   active: commands.heading.active({ level: 1 }),
-    // },
+    {
+      component: 'h1',
+      command: () => commands.heading.run({ level: 1 }),
+      active: commands.heading.active({ level: 1 }),
+    },
     {
       component: 'ol',
       command: () => commands.orderedList.run(),
@@ -118,6 +124,11 @@ function Menu() {
       component: 'ul',
       command: () => commands.bulletList.run(),
       active: commands.bulletList.active(),
+    },
+    {
+      component: 'todo list',
+      command: () => commands.todoList.run(),
+      active: commands.todoList.active(),
     },
     {
       component: 'quote',
@@ -167,6 +178,21 @@ const Container = styled('div')`
     padding: 0;
     > p {
       margin: 0;
+    }
+
+    &.todo-item {
+      display: flex;
+      align-items: center;
+
+      &[data-done=true] {
+        text-decoration: line-through;
+      }
+
+      .todo-content {
+        p {
+          margin: 0;
+        }
+      }
     }
   }
 
