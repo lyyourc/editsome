@@ -1,5 +1,5 @@
 import { FatsoNode } from '..'
-import { wrapInList } from 'prosemirror-schema-list'
+import { wrapInList, splitListItem } from 'prosemirror-schema-list'
 
 export default function todoListNode(): FatsoNode {
   return {
@@ -34,5 +34,10 @@ export default function todoListNode(): FatsoNode {
         },
       }
     },
+    keymaps({ schema }) {
+      return {
+        'Enter': splitListItem(schema.nodes.todoItem)
+      }
+    }
   }
 }
