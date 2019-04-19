@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
 import { useRef, useEffect } from 'react'
 import styled from '@emotion/styled'
-import Fatso, { useEditorContext } from '..'
+import { useEditorContext, useEditor, Provider } from '..'
 import { MarkBuiltin, NodeBuiltin } from '../extensions'
 import getMarkAttrs from '../utils/getMarkAttrs';
 import { Selection, TextSelection, Transaction } from 'prosemirror-state';
 
 export default function EditorTest() {
-  const editorRef = useRef(null)
   const content = `
     <p>
       Hello, I am <a href="http://foo.com">foo</a>.
@@ -23,13 +22,14 @@ export default function EditorTest() {
       <img src="https://avatars1.githubusercontent.com/u/6823863?s=200&v=4" />
     </p>
   `
+  const { editor, containerRef } = useEditor({ content })
 
   return (
-    <Fatso container={editorRef} content={content}>
+    <Provider value={editor}>
       <Menu />
-      <Container ref={editorRef} />
+      <Container ref={containerRef} />
       <FloatingMenu />
-    </Fatso>
+    </Provider>
   )
 }
 
