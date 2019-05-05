@@ -1,6 +1,6 @@
 import { EditorState, Plugin } from 'prosemirror-state'
-import { EditorView } from 'prosemirror-view'
-import { Schema, DOMParser, NodeSpec, MarkSpec } from 'prosemirror-model'
+import { EditorView, EditorProps } from 'prosemirror-view'
+import { Schema, DOMParser, NodeSpec, MarkSpec, Node } from 'prosemirror-model'
 import { keymap } from 'prosemirror-keymap'
 import { baseKeymap } from 'prosemirror-commands'
 import {
@@ -28,6 +28,7 @@ import linkMark from './extensions/marks/link';
 import todoListNode from './extensions/nodes/todoList';
 import todoItemNode from './extensions/nodes/todoItem';
 import imageNode from './extensions/nodes/image';
+import { withProsemirrorNodeView } from './utils/reactNodeView';
 
 export type EditorOptions = {
   el: HTMLElement
@@ -157,8 +158,11 @@ export default class Editor<N extends string = any, M extends string = any> {
     const { state, options } = this
     const { el, onUpdate } = options
 
+    const nodeViews = this.createNodeViews()
+
     const view = new EditorView(el, {
       state,
+      nodeViews,
       dispatchTransaction: transaction => {
         this.state = this.state.apply(transaction)
         view.updateState(this.state)
@@ -170,6 +174,19 @@ export default class Editor<N extends string = any, M extends string = any> {
     })
 
     return view
+  }
+
+  createNodeViews() {
+    return this.extensions.reduce((acc, extension) => {
+      if (extension.render) {
+        return {
+          ...acc,
+          [extension.name]: withProsemirrorNodeView(extension.render)
+        }
+      }
+
+      return acc
+    }, {} as EditorProps['nodeViews'])
   }
 
   createInputRules(): Plugin {

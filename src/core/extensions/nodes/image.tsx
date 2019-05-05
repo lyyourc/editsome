@@ -1,3 +1,4 @@
+import React from 'react'
 import { FatsoNode } from '..'
 
 export default function imageNode(): FatsoNode {
@@ -28,6 +29,14 @@ export default function imageNode(): FatsoNode {
         },
       ],
       toDOM: node => ['img', node.attrs],
+    },
+
+    render({ node }) {
+      const { attrs } = node
+
+      return (
+        <img {...attrs} />
+      )
     },
 
     command({ view, schema }) {
