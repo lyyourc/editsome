@@ -1,5 +1,6 @@
 import React from 'react'
 import { FatsoNode } from '..'
+import ReactNodeView, { ReactNodeViewRenderProps } from '../../utils/reactNodeView';
 
 export default function imageNode(): FatsoNode {
   return {
@@ -31,12 +32,14 @@ export default function imageNode(): FatsoNode {
       toDOM: node => ['img', node.attrs],
     },
 
-    render({ node }) {
-      const { attrs } = node
+    nodeView: class ImageNodeView extends ReactNodeView {
+      render({ node }: ReactNodeViewRenderProps) {
+        const { attrs } = node
 
-      return (
-        <img {...attrs} />
-      )
+        return (
+          <img {...attrs} />
+        )
+      }
     },
 
     command({ view, schema }) {

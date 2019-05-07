@@ -3,7 +3,7 @@ import Editor from '../editor'
 import { InputRule } from 'prosemirror-inputrules'
 import { FatsoCommand } from '../commands'
 import { Plugin } from 'prosemirror-state'
-import { ReactNodeViewProps } from '../utils/reactNodeView';
+import ReactNodeView from '../utils/reactNodeView';
 
 export type ExtensionType = 'node' | 'mark' | 'extension'
 export type NodeBuiltin = 'doc' | 'paragraph' | 'text' | 'heading'
@@ -14,7 +14,7 @@ export interface FatsoExtension<Spec = NodeSpec | MarkSpec> {
   name: string
   schema?: Spec
 
-  render?: ReactNodeViewProps['component']
+  nodeView?: typeof ReactNodeView
 
   plugins?: () => Plugin[]
 

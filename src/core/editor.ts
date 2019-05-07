@@ -178,10 +178,10 @@ export default class Editor<N extends string = any, M extends string = any> {
 
   createNodeViews() {
     return this.extensions.reduce((acc, extension) => {
-      if (extension.render) {
+      if (extension.nodeView) {
         return {
           ...acc,
-          [extension.name]: withProsemirrorNodeView(extension.render)
+          [extension.name]: withProsemirrorNodeView(extension.nodeView)
         }
       }
 
