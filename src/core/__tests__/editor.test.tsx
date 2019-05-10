@@ -19,6 +19,8 @@ export default function EditorTest() {
     </ul>
     <p>
       This is an image <br />
+    </p>
+    <p>
       <img src="https://avatars1.githubusercontent.com/u/6823863?s=200&v=4" />
     </p>
   `
