@@ -1,8 +1,8 @@
 import React from 'react'
-import { FatsoNode } from '..'
+import { Node } from '..'
 import ReactNodeView, { ReactNodeViewRenderProps } from '../../utils/reactNodeView';
 
-export default function imageNode(): FatsoNode {
+export default function imageNode(): Node {
   return {
     type: 'node',
     name: 'image',

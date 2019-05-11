@@ -1,5 +1,5 @@
 {
-  "name": "fatso",
+  "name": "editsome",
   "version": "1.0.0",
   "description": "A pleasant editor",
   "main": "lib/index.js",
@@ -16,15 +16,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lyyourc/sofui.git"
+    "url": "git+https://github.com/lyyourc/editsome.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/lyyourc/kibocat/issues"
+    "url": "https://github.com/lyyourc/editsome/issues"
   },
-  "homepage": "https://github.com/lyyourc/kibocat#readme",
+  "homepage": "https://github.com/lyyourc/editsome#readme",
   "peerDependencies": {
     "react": "^16.8.6",
     "react-dom": "^16.8.6"

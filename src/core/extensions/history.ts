@@ -1,7 +1,7 @@
-import { FatsoExtension } from '.'
+import { Extension } from '.'
 import { history, undo, redo } from 'prosemirror-history'
 
-export default function histroyExtension(): FatsoExtension {
+export default function histroyExtension(): Extension {
   return {
     type: 'extension',
     name: 'histroy',

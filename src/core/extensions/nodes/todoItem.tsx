@@ -1,10 +1,10 @@
 import React from 'react'
-import { FatsoNode } from '..'
+import { Node } from '..'
 import { Plugin } from 'prosemirror-state'
 import ReactNodeView, { ReactNodeViewRenderProps } from '../../utils/reactNodeView'
 
 // https://discuss.prosemirror.net/t/todo-list-improvements/1449
-export default function todoItemNode(): FatsoNode {
+export default function todoItemNode(): Node {
   return {
     type: 'node',
     name: 'todoItem',

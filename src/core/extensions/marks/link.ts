@@ -1,4 +1,4 @@
-import { FatsoMark } from '..'
+import { Mark } from '..'
 import { toggleMark } from 'prosemirror-commands'
 import isMarkActive from '../../utils/isMarkActive'
 import { Plugin, TextSelection } from 'prosemirror-state'
@@ -6,7 +6,7 @@ import getMarkRange from '../../utils/getMarkRange'
 import updateMark from '../../commands/updateMark'
 import removeMark from '../../commands/removeMark'
 
-export default function linkMark(): FatsoMark {
+export default function linkMark(): Mark {
   return {
     type: 'mark',
     name: 'link',

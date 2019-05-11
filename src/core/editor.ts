@@ -10,8 +10,8 @@ import {
   ellipsis,
   InputRule,
 } from 'prosemirror-inputrules'
-import { FatsoExtension } from './extensions'
-import { FatsoCommands } from './commands'
+import { Extension } from './extensions'
+import { Commands } from './commands'
 import blockquoteNode from './extensions/nodes/blockquote'
 import docNode from './extensions/nodes/doc'
 import textNode from './extensions/nodes/text'
@@ -38,11 +38,11 @@ export type EditorOptions = {
 
 export default class Editor<N extends string = any, M extends string = any> {
   options: EditorOptions
-  extensions: FatsoExtension[]
+  extensions: Extension[]
   schema: Schema<N, M>
   state: EditorState<Schema<N, M>>
   view: EditorView<Schema<N, M>>
-  commands: FatsoCommands
+  commands: Commands
   tooltip: Tooltip = {
     left: 0,
     top: 0,
@@ -83,10 +83,10 @@ export default class Editor<N extends string = any, M extends string = any> {
     const { schema, view } = this
     return this.extensions.reduce(
       (allCommands, extension) => {
-        let cmds: Partial<FatsoCommands> = {}
+        let cmds: Partial<Commands> = {}
 
         if (extension.command) {
-          cmds[extension.name as keyof FatsoCommands] = extension.command({
+          cmds[extension.name as keyof Commands] = extension.command({
             view,
             schema,
           })
@@ -101,7 +101,7 @@ export default class Editor<N extends string = any, M extends string = any> {
           ...cmds,
         }
       },
-      {} as FatsoCommands
+      {} as Commands
     )
   }
 

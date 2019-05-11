@@ -1,7 +1,7 @@
 import { Schema, NodeSpec, MarkSpec } from 'prosemirror-model'
 import Editor from '../editor'
 import { InputRule } from 'prosemirror-inputrules'
-import { FatsoCommand } from '../commands'
+import { Command } from '../commands'
 import { Plugin } from 'prosemirror-state'
 import ReactNodeView from '../utils/reactNodeView';
 
@@ -9,7 +9,7 @@ export type ExtensionType = 'node' | 'mark' | 'extension'
 export type NodeBuiltin = 'doc' | 'paragraph' | 'text' | 'heading'
 export type MarkBuiltin = 'strong' | 'link'
 
-export interface FatsoExtension<Spec = NodeSpec | MarkSpec> {
+export interface Extension<Spec = NodeSpec | MarkSpec> {
   type: ExtensionType
   name: string
   schema?: Spec
@@ -21,12 +21,12 @@ export interface FatsoExtension<Spec = NodeSpec | MarkSpec> {
   command?: (props: {
     view: Editor['view']
     schema: Editor['schema']
-  }) => FatsoCommand
+  }) => Command
 
   commands?: (props: {
     view: Editor['view']
     schema: Editor['schema']
-  }) => { [key: string]: FatsoCommand }
+  }) => { [key: string]: Command }
 
   keymaps?: (props: {
     schema: Editor['schema']
@@ -35,10 +35,10 @@ export interface FatsoExtension<Spec = NodeSpec | MarkSpec> {
   inputRules?: (props: { schema: Editor['schema'] }) => InputRule[]
 }
 
-export interface FatsoNode extends FatsoExtension<NodeSpec> {
+export interface Node extends Extension<NodeSpec> {
   type: 'node'
 }
 
-export interface FatsoMark extends FatsoExtension<MarkSpec> {
+export interface Mark extends Extension<MarkSpec> {
   type: 'mark'
 }

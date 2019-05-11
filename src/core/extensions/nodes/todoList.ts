@@ -1,7 +1,7 @@
-import { FatsoNode } from '..'
+import { Node } from '..'
 import { wrapInList, splitListItem } from 'prosemirror-schema-list'
 
-export default function todoListNode(): FatsoNode {
+export default function todoListNode(): Node {
   return {
     type: 'node',
     name: 'todoList',

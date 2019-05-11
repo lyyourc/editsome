@@ -1,7 +1,7 @@
-import { FatsoNode } from '..'
+import { Node } from '..'
 import { chainCommands, exitCode } from 'prosemirror-commands'
 
-export default function hardbreakNode(): FatsoNode {
+export default function hardbreakNode(): Node {
   return {
     type: 'node',
     name: 'hardbreak',

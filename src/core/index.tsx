@@ -42,7 +42,7 @@ export function useEditor({ content }: useEditorProps) {
   }
 }
 
-export const FatsoContext = React.createContext({} as Editor)
+export const EditorContext = React.createContext({} as Editor)
 
 export function Provider({
   value,
@@ -51,9 +51,9 @@ export function Provider({
   value: Editor
   children: React.ReactNode
 }) {
-  return <FatsoContext.Provider value={value}>{children}</FatsoContext.Provider>
+  return <EditorContext.Provider value={value}>{children}</EditorContext.Provider>
 }
 
 export function useEditorContext<N extends string, M extends string>() {
-  return useContext<Editor<N, M>>(FatsoContext)
+  return useContext<Editor<N, M>>(EditorContext)
 }

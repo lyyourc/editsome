@@ -1,7 +1,7 @@
-import { FatsoNode } from '..'
+import { Node } from '..'
 import { splitListItem } from 'prosemirror-schema-list';
 
-export default function listItemNode(): FatsoNode {
+export default function listItemNode(): Node {
   return {
     type: 'node',
     name: 'listItem',

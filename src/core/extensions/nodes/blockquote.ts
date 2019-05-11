@@ -1,9 +1,9 @@
-import { FatsoNode } from '..'
+import { Node } from '..'
 import isNodeActive from '../../utils/isNodeActive'
 import toggleWrap from '../../commands/toggleWrap';
 import { wrappingInputRule } from 'prosemirror-inputrules';
 
-export default function blockquoteNode(): FatsoNode {
+export default function blockquoteNode(): Node {
   return {
     type: 'node',
     name: 'blockquote',

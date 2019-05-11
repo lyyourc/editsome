@@ -1,4 +1,4 @@
-# fatso
+# editsome
 
 A pleasant editor 🥤
 

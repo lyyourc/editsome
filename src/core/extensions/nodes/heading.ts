@@ -1,4 +1,4 @@
-import { FatsoNode } from '..'
+import { Node } from '..'
 import { setBlockType } from 'prosemirror-commands'
 import isNodeActive from '../../utils/isNodeActive'
 import { textblockTypeInputRule } from 'prosemirror-inputrules'
@@ -8,7 +8,7 @@ export type HeadingCommandOptions = {
   level: number
 }
 
-export default function headingNode(): FatsoNode {
+export default function headingNode(): Node {
   const options = {
     levels: [1, 2, 3, 4, 5, 6],
   }

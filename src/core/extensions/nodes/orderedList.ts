@@ -1,8 +1,8 @@
-import { FatsoNode } from '..'
+import { Node } from '..'
 import toggleList from '../../commands/toggleList';
 import isNodeActive from '../../utils/isNodeActive';
 
-export default function orderListNode(): FatsoNode {
+export default function orderListNode(): Node {
   return {
     type: 'node',
     name: 'orderedList',
