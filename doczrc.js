@@ -2,7 +2,7 @@ export default {
   typescript: true,
   codeSandbox: false,
   themeConfig: {
-    showPlaygroundEditor: true,
+    showPlaygroundEditor: false,
   },
   menu: [
     'Getting Started',
