@@ -1,5 +1,7 @@
 import { Node } from '..'
 import { wrapInList, splitListItem } from 'prosemirror-schema-list'
+import toggleList from '../../commands/toggleList';
+import isNodeActive from '../../utils/isNodeActive';
 
 export default function todoListNode(): Node {
   return {
@@ -28,9 +30,9 @@ export default function todoListNode(): Node {
       const type = schema.nodes.todoList
 
       return {
-        active: () => false,
+        active: () => isNodeActive({ state: view.state, type }),
         run: () => {
-          return wrapInList(type)(view.state, view.dispatch)
+          return toggleList(type, schema.nodes.todoItem)(view.state, view.dispatch)
         },
       }
     },
